@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/screens/archived.dart';
-import 'package:todo_app/screens/done.dart';
-import 'package:todo_app/screens/tasks.dart';
 import 'package:sqflite/sqflite.dart';
+import 'screens/home.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,27 +12,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  int currentIndex = 0;
-  late Database database; // = await openDatabase('todo.db', version: 1);
-
-  List<Widget> screens = [
-    TasksScreen(),
-    DoneScreen(),
-    ArchivedScreen(),
-  ];
-
-  List<String> titles = [
-    'Tasks',
-    'Done',
-    'Archived',
-  ];
+  late Database database;
 
   @override
   initState() {
     super.initState();
-    creatDB().then((value) {
-      insertDB();
-    });
+    createDB();
   }
 
   @override
@@ -44,38 +27,18 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(titles[currentIndex]),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          // type: BottomNavigationBarType.fixed,
-          elevation: 10.0,
-          onTap: (index) {
-            setState(() {
-              currentIndex = index;
-            });
-          },
-          currentIndex: currentIndex,
-          items: [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.menu_rounded), label: 'Tasks'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.check_circle_outlined), label: 'Done'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.archive_outlined), label: 'Archived'),
-          ],
-        ),
-        body: screens[currentIndex],
-      ),
+      home:Home()
     );
   }
 
-  Future creatDB() async {
+  Future createDB() async {
     database = await openDatabase('todo.db', version: 1,
         onCreate: (database, version) async {
       await database.execute(
-          'CREATE TABLE tasks (id INTEGER PRIMARY KEY, title TEXT, date TEXT, time TEXT, status TEXT)');
+          'CREATE TABLE tasks (id INTEGER PRIMARY KEY, title TEXT, date TEXT, time TEXT, status TEXT)'
+          ).catchError((error){
+            print(error.toString());
+      });
       print('table created');
     }, onOpen: (database) {
       print('database opened');
@@ -86,8 +49,12 @@ class _MyAppState extends State<MyApp> {
     await database.transaction(
       (txn) async {
         await txn.rawInsert(
-            'INSERT INTO tasks(title, date, time, status) VALUES(travel, 16-10-2021, active)');
-        print('done successfully');
+            'INSERT INTO tasks(title, date, time, status) VALUES("good bye", "17-10-2021", "tomorrow", "active")'
+        ).then((value) {
+          print('$value inserted successfully');
+        }).catchError((error){
+          print(error.toString());
+        });
       },
     );
   }
