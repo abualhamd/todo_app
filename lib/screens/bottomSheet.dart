@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/decorations.dart';
 import 'package:todo_app/components.dart';
-//hello world
 
 class MyBottomSheet extends StatefulWidget {
   const MyBottomSheet({Key? key}) : super(key: key);
