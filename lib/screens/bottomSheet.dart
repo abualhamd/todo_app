@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/decorations.dart';
 import 'package:todo_app/components.dart';
+//hello
 
 class MyBottomSheet extends StatefulWidget {
   const MyBottomSheet({Key? key}) : super(key: key);
@@ -19,13 +20,14 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
   Widget build(BuildContext context) {
     return Container(
       // width: double.infinity,
-        decoration: BoxDecoration(
-          // backgroundColor: Colors.lightBlueAccent,
-          // backgroundBlendMode: BlendMode.modulate,
-          color: Colors.white,
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadiusDirectional.only(topStart: Radius.circular(30), topEnd: Radius.circular(30)),
-        ),
+      decoration: BoxDecoration(
+        // backgroundColor: Colors.lightBlueAccent,
+        // backgroundBlendMode: BlendMode.modulate,
+        color: Colors.white,
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadiusDirectional.only(
+            topStart: Radius.circular(30), topEnd: Radius.circular(30)),
+      ),
       child: Form(
         child: SingleChildScrollView(
           reverse: true,
@@ -41,24 +43,30 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
               //     decoration: kInputDecoration,
               //   ),
               // ),
-              FormComponent(controller: titleController, decoration: kInputDecoration),
-              FormComponent(controller: dateController, decoration: kInputDecoration.copyWith(
-                prefixIcon: Icon(Icons.calendar_today_rounded),
-                label: Text('date'),),
-                picker: Future.delayed(Duration.zero, (){
-                  showDatePicker(
+              FormComponent(
+                  controller: titleController, decoration: kInputDecoration),
+              FormComponent(
+                  controller: dateController,
+                  decoration: kInputDecoration.copyWith(
+                    prefixIcon: Icon(Icons.calendar_today_rounded),
+                    label: Text('date'),
+                  ),
+                  picker: Future.delayed(Duration.zero, () {
+                    showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
                       firstDate: DateTime.now(),
                       lastDate: DateTime.parse('2022-06-22'),
-                  ).then((value) {
-                    print(value.toString());
-                  });
-                })
-              ),
-              FormComponent(controller: timeController, decoration: kInputDecoration.copyWith(
-                prefixIcon: Icon(Icons.punch_clock_rounded),
-                label: Text('time'),),
+                    ).then((value) {
+                      print(value.toString());
+                    });
+                  })),
+              FormComponent(
+                controller: timeController,
+                decoration: kInputDecoration.copyWith(
+                  prefixIcon: Icon(Icons.punch_clock_rounded),
+                  label: Text('time'),
+                ),
                 // picker: Future.delayed(Duration.zero, (){
                 //       showTimePicker(
                 //       context: context,
