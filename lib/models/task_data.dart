@@ -22,12 +22,15 @@ class TaskData extends ChangeNotifier {
     notifyListeners();
   }
 
-  void insertDB() async {
+  void insertDB(
+      {required String title,
+      required String date,
+      required String time}) async {
     await _database.transaction(
       (txn) async {
         await txn
             .rawInsert(
-                'INSERT INTO tasks(title, date, time, status) VALUES("good bye", "17-10-2021", "tomorrow", "active")')
+                'INSERT INTO tasks(title, date, time, status) VALUES("$title", "$date", "$time", "active")')
             .then((value) {
           print('$value inserted successfully');
         }).catchError((error) {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/models/task_data.dart';
 import 'screens/home.dart';
@@ -14,16 +13,16 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  @override
-  initState() {
-    super.initState();
-    Provider.of<TaskData>(context, listen: false).createDB();
-  }
+  // @override
+  // initState() {
+  //   super.initState();
+  //   Provider.of<TaskData>(context, listen: false).createDB();
+  // }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (BuildContext context) {},
+      create: (context) => TaskData(),
       child: MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(

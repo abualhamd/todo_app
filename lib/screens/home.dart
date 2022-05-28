@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/models/task_data.dart';
 import 'package:todo_app/screens/archived.dart';
 import 'package:todo_app/screens/done.dart';
 import 'package:todo_app/screens/tasks.dart';
 import 'package:todo_app/screens/bottomSheet.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -12,8 +14,13 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<TaskData>(context, listen: false).createDB();
+  }
+
   int currentIndex = 0;
-  // GlobalKey scaffoldKey = GlobalKey<ScaffoldState>();
   bool bottomSheetOpened = false;
   IconData bottomNavIcon = Icons.edit;
 
@@ -32,13 +39,12 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // key: scaffoldKey,
       // resizeToAvoidBottomInset: true,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          setState(() {
-            bottomNavIcon = Icons.add;
-          });
+          // setState(() {
+          //   bottomNavIcon = Icons.add;
+          // });
           showModalBottomSheet<void>(
             isScrollControlled: true,
             context: context,

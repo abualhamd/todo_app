@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/decorations.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/models/task_data.dart';
 import 'package:todo_app/components.dart';
 
 class MyBottomSheet extends StatefulWidget {
-
   @override
   State<MyBottomSheet> createState() => _MyBottomSheetState();
 }
@@ -12,17 +13,19 @@ class MyBottomSheet extends StatefulWidget {
 class _MyBottomSheetState extends State<MyBottomSheet> {
   TextEditingController titleController = TextEditingController();
   TextEditingController timeController = TextEditingController();
-
-  // TextEditingController statusController = TextEditingController();
   TextEditingController dateController = TextEditingController();
   final EdgeInsetsGeometry kFormTextFieldPadding =
       const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0);
-  GlobalKey formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
+
+  String? validator(String? value) {
+    if (value == null || value.isEmpty) return 'field must not be empty';
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      // width: double.infinity,
       decoration: BoxDecoration(
         // backgroundColor: Colors.lightBlueAccent,
         // backgroundBlendMode: BlendMode.modulate,
@@ -32,20 +35,20 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
             topStart: Radius.circular(30), topEnd: Radius.circular(30)),
       ),
       child: Form(
-        key: formKey,
+        key: _formKey,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Padding(
               padding: kFormTextFieldPadding,
               child: TextFormField(
-                controller: titleController,
-                decoration: kInputDecoration,
-                validator: (value) {
-                  if (value!.isEmpty) return 'title must not be empty';
-                  return null;
-                },
-              ),
+                  controller: titleController,
+                  decoration: kInputDecoration,
+                  onChanged: (value) {
+                    titleController.text = value;
+                    print(titleController.text);
+                  },
+                  validator: validator),
             ),
             Padding(
               padding: kFormTextFieldPadding,
@@ -56,10 +59,7 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
                   prefixIcon: Icon(Icons.calendar_today_rounded),
                   label: Text('date'),
                 ),
-                validator: (value) {
-                  if (value!.isEmpty) return 'date must not be empty';
-                  return null;
-                },
+                validator: validator,
                 onTap: () {
                   Future.delayed(
                     Duration.zero,
@@ -70,9 +70,9 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
                         firstDate: DateTime.now(),
                         lastDate: DateTime.parse('2022-06-22'),
                       ).then((value) {
-                        String time = DateFormat.yMMMd().format(value!);
-                        print(time);
-                        dateController.text = time;
+                        String date = DateFormat.yMMMd().format(value!);
+                        print(date);
+                        dateController.text = date;
                       });
                     },
                   );
@@ -88,10 +88,7 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
                   prefixIcon: Icon(Icons.punch_clock_rounded),
                   label: Text('time'),
                 ),
-                validator: (value) {
-                  if (value!.isEmpty) return 'date must not be empty';
-                  return null;
-                },
+                validator: validator,
                 onTap: () {
                   Future.delayed(Duration.zero, () {
                     showTimePicker(
@@ -106,16 +103,18 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
               ),
             ),
             TextButton(
-                child: Text('submit'),
-                onPressed: () {
-                  // if(formKey.currentState.validate())
-                  if (Form.of(context)!.validate())
-                    Navigator.pop(context, [
-                      titleController.text,
-                      dateController.text,
-                      timeController.text
-                    ]);
-                }),
+              child: Text('submit'),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  Provider.of<TaskData>(context, listen: false).insertDB(
+                    title: titleController.text,
+                    date: dateController.text,
+                    time: timeController.text,
+                  );
+                  Navigator.pop(context);
+                }
+              },
+            ),
           ],
         ),
       ),
