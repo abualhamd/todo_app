@@ -13,7 +13,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int currentIndex = 0;
-  var scaffoldKey = GlobalKey<ScaffoldState>();
+  // GlobalKey scaffoldKey = GlobalKey<ScaffoldState>();
   bool bottomSheetOpened = false;
   IconData bottomNavIcon = Icons.edit;
 
@@ -33,16 +33,16 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       // key: scaffoldKey,
+      // resizeToAvoidBottomInset: true,
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          // setState(() {
-          //   bottomNavIcon = Icons.add;
-          // });
+        onPressed: () {
+          setState(() {
+            bottomNavIcon = Icons.add;
+          });
           showModalBottomSheet<void>(
             isScrollControlled: true,
             context: context,
-            builder: (BuildContext context)
-            {
+            builder: (BuildContext context) {
               return MyBottomSheet();
             },
           );
@@ -72,6 +72,5 @@ class _HomeState extends State<Home> {
       ),
       body: screens[currentIndex],
     );
-
   }
 }
