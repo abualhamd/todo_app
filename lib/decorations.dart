@@ -15,5 +15,5 @@ InputDecoration kInputDecoration = InputDecoration(
     color: Colors.grey[400],
   ),
   // prefixIconColor: ,
-  label: Text('Title', style: TextStyle(color: Colors.grey[400])),
+  label: Text('title', style: TextStyle(color: Colors.grey[400])),
 );

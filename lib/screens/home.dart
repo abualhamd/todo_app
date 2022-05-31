@@ -42,9 +42,6 @@ class _HomeState extends State<Home> {
       // resizeToAvoidBottomInset: true,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // setState(() {
-          //   bottomNavIcon = Icons.add;
-          // });
           showModalBottomSheet<void>(
             isScrollControlled: true,
             context: context,
