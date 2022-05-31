@@ -17,7 +17,8 @@ class TasksScreen extends StatelessWidget {
             return buildTask(
               width: MediaQuery.of(context).size.width,
               task: task,
-            );
+              onLongPress: () => Provider.of<TaskData>(context, listen: false)
+                    .deleteTask(index: task['id']));
           },
         );
       },

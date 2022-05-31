@@ -18,7 +18,7 @@ class TaskData extends ChangeNotifier {
       });
       print('table created');
     }, onOpen: (database) async {
-      _list = await _retriveDB(database, 'active');
+      _updateTasksList(db: database);
     });
 
     notifyListeners();
@@ -40,9 +40,31 @@ class TaskData extends ChangeNotifier {
         });
       },
     );
-    _list = await _retriveDB(_database, 'active');
+    _updateTasksList();
+    // _list = await _retriveDB(_database, 'active');
     //todo _list.add({'title':title, 'date': date, 'time': time, 'status': 'active'});
-    notifyListeners();
+    // notifyListeners();
+  }
+
+  void updateDB(
+      {required int index,
+      String? newTitle,
+      String? newDate,
+      String? newTime}) async {
+    newTitle ??= _list[index]['title'];
+    newDate ??= _list[index]['date'];
+    newTime ??= _list[index]['time'];
+    await _database.rawUpdate(
+        'UPDATE tasks SET title = ?, date = ?, time = ? WHERE id = ?',
+        ['$newTitle', '$newDate', '$newTime', index]);
+
+    _updateTasksList();
+  }
+
+  void deleteTask({required int index}) async {
+    await _database.rawDelete('DELETE FROM tasks WHERE id = ?', [index]);
+    _updateTasksList();
+    // print(tasksData);
   }
 
   Future<List<Map>> _retriveDB(Database database, String status) async {
@@ -54,4 +76,9 @@ class TaskData extends ChangeNotifier {
   get listLength => _list.length;
 
   UnmodifiableListView get tasksData => UnmodifiableListView(_list);
+
+  void _updateTasksList({Database? db}) async {
+    _list = await _retriveDB(db ?? _database, 'active');
+    notifyListeners();
+  }
 }
