@@ -3,7 +3,7 @@ import 'package:todo_app/models/task_data.dart';
 import 'package:todo_app/screens/archived.dart';
 import 'package:todo_app/screens/done.dart';
 import 'package:todo_app/screens/tasks.dart';
-import 'package:todo_app/screens/bottomSheet.dart';
+import 'package:todo_app/screens/add_task_screen.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
@@ -46,7 +46,7 @@ class _HomeState extends State<Home> {
             isScrollControlled: true,
             context: context,
             builder: (BuildContext context) {
-              return MyBottomSheet();
+              return AddTaskScreen();
             },
           );
         },

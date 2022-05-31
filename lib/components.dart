@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 
 Widget buildTask(
-    {required double width, required Map task, required Function onLongPress}) {
+    {required double width,
+    required Map task,
+    required Function onLongPress,
+    required Function onTap}) {
   return InkWell(
+    onTap: () {
+      onTap();
+    },
     onLongPress: () {
       onLongPress();
     },

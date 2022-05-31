@@ -4,12 +4,26 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/models/task_data.dart';
 
-class MyBottomSheet extends StatefulWidget {
+class AddTaskScreen extends StatefulWidget {
+  String? initialTitle;
+  String? initialDate;
+  String? initialTime;
+
+  AddTaskScreen({this.initialTitle, this.initialDate, this.initialTime});
+
   @override
-  State<MyBottomSheet> createState() => _MyBottomSheetState();
+  State<AddTaskScreen> createState() => _AddTaskScreenState();
 }
 
-class _MyBottomSheetState extends State<MyBottomSheet> {
+class _AddTaskScreenState extends State<AddTaskScreen> {
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   titleController.text = widget.initialTitle!;
+  //   dateController.text = widget.initialDate!;
+  //   timeController.text = widget.initialTime!;
+  // }
+
   final _formKey = GlobalKey<FormState>();
   TextEditingController titleController = TextEditingController();
   TextEditingController timeController = TextEditingController();
@@ -40,6 +54,7 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
               padding: kFormTextFieldPadding,
               //TODO fix the keyboard covering the textformfilds
               child: TextFormField(
+                // initialValue: titleController.text,
                 controller: titleController,
                 decoration: kInputDecoration,
                 validator: validator,
@@ -48,6 +63,7 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
             Padding(
               padding: kFormTextFieldPadding,
               child: TextFormField(
+                // initialValue: widget.initialDate,
                 keyboardType: TextInputType.none,
                 controller: dateController,
                 decoration: kInputDecoration.copyWith(
@@ -76,6 +92,7 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
             Padding(
               padding: kFormTextFieldPadding,
               child: TextFormField(
+                // initialValue: widget.initialTime,
                 keyboardType: TextInputType.none,
                 controller: timeController,
                 decoration: kInputDecoration.copyWith(
