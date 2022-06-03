@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:collection/collection.dart';
-import 'task.dart';
 
 class TaskData extends ChangeNotifier {
   late Database _database;
-  List<Map> _list = [];
+  List<Map> _activeList = [];
+  List<Map> _doneList = [];
+  List<Map> _archivedList = [];
 
   void createDB() async {
     _database = await openDatabase('todo.db', version: 1,
@@ -18,7 +19,9 @@ class TaskData extends ChangeNotifier {
       });
       print('table created');
     }, onOpen: (database) async {
-      _updateTasksList(db: database);
+      _updateActiveList(db: database);
+      _updateDoneList(db: database);
+      _updateArchivedList(db: database);
     });
 
     notifyListeners();
@@ -40,31 +43,26 @@ class TaskData extends ChangeNotifier {
         });
       },
     );
-    _updateTasksList();
+    _updateActiveList();
     // _list = await _retriveDB(_database, 'active');
     //todo _list.add({'title':title, 'date': date, 'time': time, 'status': 'active'});
     // notifyListeners();
   }
 
-  void updateDB(
-      {required int index,
-      String? newTitle,
-      String? newDate,
-      String? newTime}) async {
-    newTitle ??= _list[index]['title'];
-    newDate ??= _list[index]['date'];
-    newTime ??= _list[index]['time'];
-    await _database.rawUpdate(
-        'UPDATE tasks SET title = ?, date = ?, time = ? WHERE id = ?',
-        ['$newTitle', '$newDate', '$newTime', index]);
+  void updateStautsDB({required String status, required int id}) async {
+    await _database
+        .rawUpdate('UPDATE tasks SET status = ? WHERE id = ?', ['$status', id]);
 
-    _updateTasksList();
+    _updateActiveList();
+    _updateDoneList();
+    _updateArchivedList();
   }
 
   void deleteTask({required int index}) async {
     await _database.rawDelete('DELETE FROM tasks WHERE id = ?', [index]);
-    _updateTasksList();
-    // print(tasksData);
+    _updateActiveList();
+    _updateDoneList();
+    _updateArchivedList();
   }
 
   Future<List<Map>> _retriveDB(Database database, String status) async {
@@ -73,12 +71,43 @@ class TaskData extends ChangeNotifier {
         'SELECT * FROM tasks  WHERE status = "$status"'); // WHERE status = "$status"
   }
 
-  get listLength => _list.length;
+  int listLength({required String taskType}) {
+    switch (taskType) {
+      case 'active':
+        return _activeList.length;
+      case 'done':
+        return _doneList.length;
+    }
 
-  UnmodifiableListView get tasksData => UnmodifiableListView(_list);
+    return _archivedList.length;
+  }
 
-  void _updateTasksList({Database? db}) async {
-    _list = await _retriveDB(db ?? _database, 'active');
+  UnmodifiableListView tasksData({required String taskType}) {
+    switch (taskType) {
+      case 'active':
+        return UnmodifiableListView(_activeList);
+      case 'done':
+        return UnmodifiableListView(_doneList);
+    }
+
+    return UnmodifiableListView(_archivedList);
+  }
+
+  void _updateActiveList({Database? db}) async {
+    _activeList = await _retriveDB(db ?? _database, 'active');
+
+    notifyListeners();
+  }
+
+  void _updateDoneList({Database? db}) async {
+    _doneList = await _retriveDB(db ?? _database, 'done');
+
+    notifyListeners();
+  }
+
+  void _updateArchivedList({Database? db}) async {
+    _archivedList = await _retriveDB(db ?? _database, 'archived');
+
     notifyListeners();
   }
 }

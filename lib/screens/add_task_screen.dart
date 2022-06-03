@@ -4,18 +4,21 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/models/task_data.dart';
 
-class AddTaskScreen extends StatefulWidget {
-  String? initialTitle;
-  String? initialDate;
-  String? initialTime;
+//TODO handle the keyboard covering the title field
 
-  AddTaskScreen({this.initialTitle, this.initialDate, this.initialTime});
+class AddTaskScreen extends StatefulWidget {
+  // String? initialTitle;
+  // String? initialDate;
+  // String? initialTime;
+
+  // AddTaskScreen({this.initialTitle, this.initialDate, this.initialTime});
 
   @override
   State<AddTaskScreen> createState() => _AddTaskScreenState();
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
+  //TODO add initial values for controllers for when trying to modify an existing task
   // @override
   // void initState() {
   //   super.initState();
