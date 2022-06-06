@@ -35,11 +35,14 @@ class Home extends StatelessWidget {
             currentIndex: MyCubit.get(context).currentIndex,
             items: [
               BottomNavigationBarItem(
-                  icon: Icon(Icons.menu_rounded), label: 'Tasks'),
+                  icon: Icon(Icons.menu_rounded),
+                  label: cubit.titles[Lists.active.index]),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.check_circle_outlined), label: 'Done'),
+                  icon: Icon(Icons.check_circle_outlined),
+                  label: cubit.titles[Lists.done.index]),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.archive_outlined), label: 'Archived'),
+                  icon: Icon(Icons.archive_outlined),
+                  label: cubit.titles[Lists.archived.index]),
             ],
           ),
           body: cubit.screens[cubit.currentIndex],
