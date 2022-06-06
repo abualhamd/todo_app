@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:todo_app/models/task_data.dart';
+import 'package:todo_app/cubit/cubit.dart';
 
 Widget buildTask({
   required double width,
@@ -41,15 +40,15 @@ Widget buildTask({
           //TODO change color of icons based on status
           IconButton(
             onPressed: () {
-              Provider.of<TaskData>(context, listen: false)
-                  .updateStautsDB(status: 'done', id: task['id']);
+              MyCubit.get(context)
+                  .updateStatusDB(status: 'done', id: task['id']);
             },
             icon: Icon(Icons.check_box_outlined),
           ),
           IconButton(
             onPressed: () {
-              Provider.of<TaskData>(context, listen: false)
-                  .updateStautsDB(status: 'archived', id: task['id']);
+              MyCubit.get(context)
+                  .updateStatusDB(status: 'archived', id: task['id']);
             },
             icon: Icon(Icons.archive_outlined),
           ),

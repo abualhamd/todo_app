@@ -1,79 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/models/task_data.dart';
-import 'package:todo_app/screens/archived.dart';
-import 'package:todo_app/screens/done.dart';
-import 'package:todo_app/screens/tasks.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_app/cubit/cubit.dart';
+import 'package:todo_app/cubit/states.dart';
 import 'package:todo_app/screens/add_task_screen.dart';
-import 'package:provider/provider.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
-
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<TaskData>(context, listen: false).createDB();
-  }
-
-  int currentIndex = 0;
-  bool bottomSheetOpened = false;
-  IconData bottomNavIcon = Icons.edit;
-
-  List<Widget> screens = [
-    TasksScreen(),
-    DoneScreen(),
-    ArchivedScreen(),
-  ];
-
-  List<String> titles = [
-    'Tasks',
-    'Done',
-    'Archived',
-  ];
-
+class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // resizeToAvoidBottomInset: true,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showModalBottomSheet<void>(
-            isScrollControlled: true,
-            context: context,
-            builder: (BuildContext context) {
-              return AddTaskScreen();
+    MyCubit cubit = MyCubit.get(context);
+
+    return BlocConsumer<MyCubit, AppState>(
+      listener: (context, state) {},
+      builder: (BuildContext context, AppState state) {
+        return Scaffold(
+          // resizeToAvoidBottomInset: true,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              showModalBottomSheet<void>(
+                isScrollControlled: true,
+                context: context,
+                builder: (BuildContext context) {
+                  return AddTaskScreen();
+                },
+              );
             },
-          );
-        },
-        child: Icon(bottomNavIcon),
-      ),
-      appBar: AppBar(
-        title: Text(titles[currentIndex]),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        // type: BottomNavigationBarType.fixed,
-        elevation: 10.0,
-        onTap: (index) {
-          setState(() {
-            currentIndex = index;
-          });
-        },
-        currentIndex: currentIndex,
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.menu_rounded), label: 'Tasks'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.check_circle_outlined), label: 'Done'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.archive_outlined), label: 'Archived'),
-        ],
-      ),
-      body: screens[currentIndex],
+            child: Icon(Icons.edit),
+          ),
+          appBar: AppBar(
+            title: Text(cubit.titles[cubit.currentIndex]),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            elevation: 10.0,
+            onTap: (index) => MyCubit.get(context).changeIndex(index),
+            currentIndex: MyCubit.get(context).currentIndex,
+            items: [
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.menu_rounded), label: 'Tasks'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.check_circle_outlined), label: 'Done'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.archive_outlined), label: 'Archived'),
+            ],
+          ),
+          body: cubit.screens[cubit.currentIndex],
+        );
+      },
     );
   }
 }

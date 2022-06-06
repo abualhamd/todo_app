@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 InputDecoration kInputDecoration = InputDecoration(
-  // focusColor: Colors.lightBlueAccent,
   border: OutlineInputBorder(
       borderSide: BorderSide.none, borderRadius: BorderRadius.circular(20)),
   focusedBorder: OutlineInputBorder(
