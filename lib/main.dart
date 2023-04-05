@@ -6,23 +6,12 @@ import 'screens/home.dart';
 void main() {
   runApp(MyApp());
 }
-
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  // @override
-  // initState() {
-  //   super.initState();
-  //   Provider.of<TaskData>(context, listen: false).createDB();
-  // }
+class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => TaskData(),
+      create: (context) => TaskData()..createDB(),
       child: MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(

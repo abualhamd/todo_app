@@ -3,10 +3,16 @@ import 'package:sqflite/sqflite.dart';
 import 'package:collection/collection.dart';
 
 class TaskData extends ChangeNotifier {
+  int currentIndex = 0;
   late Database _database;
   List<Map> _activeList = [];
   List<Map> _doneList = [];
   List<Map> _archivedList = [];
+
+  void setCurrentIndex({required int index}) {
+    currentIndex = index;
+    notifyListeners();
+  }
 
   void createDB() async {
     _database = await openDatabase('todo.db', version: 1,
@@ -58,7 +64,7 @@ class TaskData extends ChangeNotifier {
     _updateArchivedList();
   }
 
-  void deleteTask({required int index}) async {
+  Future<void> deleteTask({required int index}) async {
     await _database.rawDelete('DELETE FROM tasks WHERE id = ?', [index]);
     _updateActiveList();
     _updateDoneList();

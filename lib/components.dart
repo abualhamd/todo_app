@@ -10,8 +10,8 @@ Widget buildTask({
 }) {
   return Dismissible(
     key: Key(task['id'].toString()),
-    onDismissed: (direction) {
-      onLongPress();
+    onDismissed: (direction) async{
+      await onLongPress();
     },
     child: Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),

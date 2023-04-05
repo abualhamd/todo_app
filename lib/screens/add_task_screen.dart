@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:todo_app/models/task_data.dart';
 
 //TODO handle the keyboard covering the title field
+// TODO make it stateless
 
 class AddTaskScreen extends StatefulWidget {
   // String? initialTitle;
@@ -17,7 +18,7 @@ class AddTaskScreen extends StatefulWidget {
   State<AddTaskScreen> createState() => _AddTaskScreenState();
 }
 
-class _AddTaskScreenState extends State<AddTaskScreen> {
+class _AddTaskScreenState extends State<AddTaskScreen>{
   //TODO add initial values for controllers for when trying to modify an existing task
   // @override
   // void initState() {
@@ -41,6 +42,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -48,10 +50,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         borderRadius: BorderRadiusDirectional.only(
             topStart: Radius.circular(30), topEnd: Radius.circular(30)),
       ),
+      height: height * 0.76,
       child: Form(
         key: _formKey,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          // mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Padding(
               padding: kFormTextFieldPadding,
@@ -59,6 +62,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               child: TextFormField(
                 // initialValue: titleController.text,
                 controller: titleController,
+                keyboardType: TextInputType.name,
+                onChanged: (value){
+      
+                },
                 decoration: kInputDecoration,
                 validator: validator,
               ),
@@ -83,9 +90,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                         initialDate: DateTime.now(),
                         firstDate: DateTime.now(),
                         //TODO make this a month from current date
-                        lastDate: DateTime.parse('2022-06-22'),
+                        lastDate: DateTime.parse('2050-06-22'),
                       ).then((value) {
-                        dateController.text = DateFormat.yMMMd().format(value!);
+                        if(value != null)
+                          dateController.text = DateFormat.yMMMd().format(value);
                       });
                     },
                   );
@@ -108,7 +116,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     showTimePicker(
                         context: context, initialTime: TimeOfDay.now())
                         .then((value) {
-                      timeController.text = value!.format(context);
+                          
+                      if(value != null)
+                        timeController.text = value.format(context);
                     });
                   });
                 },

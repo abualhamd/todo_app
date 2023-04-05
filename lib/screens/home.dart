@@ -6,31 +6,15 @@ import 'package:todo_app/screens/tasks.dart';
 import 'package:todo_app/screens/add_task_screen.dart';
 import 'package:provider/provider.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class Home extends StatelessWidget {
 
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<TaskData>(context, listen: false).createDB();
-  }
-
-  int currentIndex = 0;
-  bool bottomSheetOpened = false;
-  IconData bottomNavIcon = Icons.edit;
-
-  List<Widget> screens = [
+  final List<Widget> screens = [
     TasksScreen(),
     DoneScreen(),
     ArchivedScreen(),
   ];
 
-  List<String> titles = [
+  final List<String> titles = [
     'Tasks',
     'Done',
     'Archived',
@@ -50,20 +34,18 @@ class _HomeState extends State<Home> {
             },
           );
         },
-        child: Icon(bottomNavIcon),
+        child: Icon(Icons.edit),
       ),
       appBar: AppBar(
-        title: Text(titles[currentIndex]),
+        title: Text(titles[context.watch<TaskData>().currentIndex]),
       ),
       bottomNavigationBar: BottomNavigationBar(
         // type: BottomNavigationBarType.fixed,
         elevation: 10.0,
         onTap: (index) {
-          setState(() {
-            currentIndex = index;
-          });
+          context.read<TaskData>().setCurrentIndex(index: index);
         },
-        currentIndex: currentIndex,
+        currentIndex: context.watch<TaskData>().currentIndex,
         items: [
           BottomNavigationBarItem(
               icon: Icon(Icons.menu_rounded), label: 'Tasks'),
@@ -73,7 +55,7 @@ class _HomeState extends State<Home> {
               icon: Icon(Icons.archive_outlined), label: 'Archived'),
         ],
       ),
-      body: screens[currentIndex],
+      body: screens[context.watch<TaskData>().currentIndex],
     );
   }
 }
