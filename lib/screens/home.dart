@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todo_app/models/task_data.dart';
+import 'package:todo_app/screens/add_task_screen.dart';
 import 'package:todo_app/screens/archived.dart';
 import 'package:todo_app/screens/done.dart';
 import 'package:todo_app/screens/tasks.dart';
-import 'package:todo_app/screens/add_task_screen.dart';
-import 'package:provider/provider.dart';
 
 class Home extends StatelessWidget {
-
   final List<Widget> screens = [
     TasksScreen(),
     DoneScreen(),
@@ -23,7 +22,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: true,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet<void>(

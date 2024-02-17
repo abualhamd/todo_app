@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/decorations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_app/decorations.dart';
 import 'package:todo_app/models/task_data.dart';
 
 //TODO handle the keyboard covering the title field
@@ -18,7 +18,7 @@ class AddTaskScreen extends StatefulWidget {
   State<AddTaskScreen> createState() => _AddTaskScreenState();
 }
 
-class _AddTaskScreenState extends State<AddTaskScreen>{
+class _AddTaskScreenState extends State<AddTaskScreen> {
   //TODO add initial values for controllers for when trying to modify an existing task
   // @override
   // void initState() {
@@ -44,17 +44,19 @@ class _AddTaskScreenState extends State<AddTaskScreen>{
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     return Container(
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       decoration: BoxDecoration(
         color: Colors.white,
         shape: BoxShape.rectangle,
         borderRadius: BorderRadiusDirectional.only(
             topStart: Radius.circular(30), topEnd: Radius.circular(30)),
       ),
-      height: height * 0.76,
+      // height: height * 0.76,
       child: Form(
         key: _formKey,
         child: Column(
-          // mainAxisSize: MainAxisSize.min,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Padding(
               padding: kFormTextFieldPadding,
@@ -63,9 +65,7 @@ class _AddTaskScreenState extends State<AddTaskScreen>{
                 // initialValue: titleController.text,
                 controller: titleController,
                 keyboardType: TextInputType.name,
-                onChanged: (value){
-      
-                },
+                onChanged: (value) {},
                 decoration: kInputDecoration,
                 validator: validator,
               ),
@@ -84,7 +84,7 @@ class _AddTaskScreenState extends State<AddTaskScreen>{
                 onTap: () {
                   Future.delayed(
                     Duration.zero,
-                        () {
+                    () {
                       showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),
@@ -92,8 +92,9 @@ class _AddTaskScreenState extends State<AddTaskScreen>{
                         //TODO make this a month from current date
                         lastDate: DateTime.parse('2050-06-22'),
                       ).then((value) {
-                        if(value != null)
-                          dateController.text = DateFormat.yMMMd().format(value);
+                        if (value != null)
+                          dateController.text =
+                              DateFormat.yMMMd().format(value);
                       });
                     },
                   );
@@ -114,10 +115,9 @@ class _AddTaskScreenState extends State<AddTaskScreen>{
                 onTap: () {
                   Future.delayed(Duration.zero, () {
                     showTimePicker(
-                        context: context, initialTime: TimeOfDay.now())
+                            context: context, initialTime: TimeOfDay.now())
                         .then((value) {
-                          
-                      if(value != null)
+                      if (value != null)
                         timeController.text = value.format(context);
                     });
                   });
